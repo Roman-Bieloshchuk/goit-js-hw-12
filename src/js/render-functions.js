@@ -3,14 +3,14 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const galleryContainer = document.querySelector('.gallery');
 const loader = document.querySelector('.loader');
-const loadMoreBtn = document.querySelector('.load-more');
+const loadMoreBtn = document.querySelector('.btn-load');
 
 let lightbox = new SimpleLightbox('.gallery a', {
   captionsData: 'alt',
   captionDelay: 250,
 });
 
-export function createGallery(images) {
+export function renderGallery(images, isAppend = false) {
   const markup = images
     .map(
       ({
@@ -27,16 +27,21 @@ export function createGallery(images) {
         <img class="gallery-image" src="${webformatURL}" alt="${tags}" width="360"/>
       </a>
       <div class="info">
-        <p class="info-item"><b>Likes:</b> ${likes}</p>
-        <p class="info-item"><b>Views:</b> ${views}</p>
-        <p class="info-item"><b>Comments:</b> ${comments}</p>
-        <p class="info-item"><b>Downloads:</b> ${downloads}</p>
+        <p class="info-item"><b>Likes:</b> <span>${likes}</span></p>
+        <p class="info-item"><b>Views:</b> <span>${views}</span></p>
+        <p class="info-item"><b>Comments:</b> <span>${comments}</span></p>
+        <p class="info-item"><b>Downloads:</b> <span>${downloads}</span></p>
       </div>
     </li>`
     )
     .join('');
 
-  galleryContainer.insertAdjacentHTML('beforeend', markup);
+  if (isAppend) {
+    galleryContainer.insertAdjacentHTML('beforeend', markup);
+  } else {
+    galleryContainer.innerHTML = markup;
+  }
+
   lightbox.refresh();
 }
 
@@ -44,18 +49,10 @@ export function clearGallery() {
   galleryContainer.innerHTML = '';
 }
 
-export function showLoader() {
-  loader.classList.remove('is-hidden');
+export function toggleLoader(isVisible) {
+  loader.classList.toggle('is-hidden', !isVisible);
 }
 
-export function hideLoader() {
-  loader.classList.add('is-hidden');
-}
-
-export function showLoadMoreBtn() {
-  loadMoreBtn.classList.remove('is-hidden');
-}
-
-export function hideLoadMoreBtn() {
-  loadMoreBtn.classList.add('is-hidden');
+export function toggleLoadMoreBtn(isVisible) {
+  loadMoreBtn.classList.toggle('is-hidden', !isVisible);
 }
